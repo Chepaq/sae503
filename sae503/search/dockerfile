@@ -1,0 +1,16 @@
+# Base image
+FROM python:3.9-slim
+
+# Dépendances
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Copier le service
+COPY search.py .
+
+# Expose le port
+EXPOSE 5003
+
+# Commande pour démarrer le service
+CMD ["python", "search.py"]

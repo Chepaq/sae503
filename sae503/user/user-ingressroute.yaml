@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: user-api-route
+  namespace: prod
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`user-api`)
+      kind: Rule
+      middlewares:
+        - name: auth-header
+          namespace: prod
+      services:
+        - name: user-api-service
+          port: 5001

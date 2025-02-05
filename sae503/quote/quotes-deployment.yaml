@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: quotes-api-deployment
+  namespace: prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: quotes-api
+  template:
+    metadata:
+      labels:
+        app: quotes-api
+    spec:
+      containers:
+      - name: quotes-api
+        image: clementserandour/api_quotes:latest
+        ports:
+        - containerPort: 5002
+        env:
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_DB
+          value: "0"
+        - name: QUOTES_SERVICE_PORT
+          value: "5002"
+        - name: ADMIN_KEY
+          value: "default_key"
+        - name: CSV_FILE_QUOTES
+          value: "/data/initial_data_quotes.csv"
+        volumeMounts:
+        - name: csv-storage
+          mountPath: /data
+      volumes:
+      - name: csv-storage
+        persistentVolumeClaim:
+          claimName: csv-pvc

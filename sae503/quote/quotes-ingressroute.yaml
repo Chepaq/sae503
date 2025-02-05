@@ -1,0 +1,16 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: quotes-api-route
+  namespace: prod
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`quotes-api`)
+      kind: Rule
+      services:
+        - name: quotes-api-service
+          port: 5002
+      middlewares:
+        - name: auth-header

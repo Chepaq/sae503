@@ -1,0 +1,9 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: auth-header
+  namespace: prod
+spec:
+  headers:
+    customRequestHeaders:
+      Authorization: "default_key"

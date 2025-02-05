@@ -1,0 +1,14 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: search-api-route
+  namespace: prod
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`search-api`)
+      kind: Rule
+      services:
+        - name: search-api-service
+          port: 5003

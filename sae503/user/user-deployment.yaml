@@ -1,0 +1,41 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-api-deployment
+  namespace: prod
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: user-api
+  template:
+    metadata:
+      labels:
+        app: user-api
+    spec:
+      containers:
+      - name: user-api
+        image: clementserandour/api_users:latest
+        ports:
+        - containerPort: 5001
+        env:
+        - name: REDIS_HOST
+          value: "redis"
+        - name: REDIS_PORT
+          value: "6379"
+        - name: REDIS_DB
+          value: "0"
+        - name: USERS_SERVICE_PORT
+          value: "5001"
+        - name: ADMIN_KEY
+          value: "default_key"
+        - name: CSV_FILE_USERS
+          value: "/data/initial_data_users.csv"
+        volumeMounts:
+        - name: csv-storage
+          mountPath: /data
+      volumes:
+      - name: csv-storage
+        persistentVolumeClaim:
+          claimName: csv-pvc
