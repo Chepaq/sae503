@@ -12,7 +12,6 @@ APP_PORT = int(os.getenv("QUOTES_SERVICE_PORT", 5002))
 ADMIN_KEY = os.getenv("ADMIN_KEY", "default_key")
 CSV_FILE_QUOTES = os.getenv("CSV_FILE_QUOTES", "initial_data_quotes.csv")
 
-# Initialisation de Flask
 app = Flask(__name__)
 redis_client = Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB, decode_responses=True)
 
@@ -25,7 +24,6 @@ def require_auth(f):
         return f(*args, **kwargs)
     return decorated
 
-# Chargement initial des données
 if not redis_client.exists("quotes:1"):
     if os.path.exists(CSV_FILE_QUOTES):
         with open(CSV_FILE_QUOTES, mode='r', encoding='utf-8') as file:
